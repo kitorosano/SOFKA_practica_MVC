@@ -25,11 +25,14 @@ let canvas = document.getElementById('canvas');
 			rightscore = 0;
       end = false;
       pause = true;
-		}
+		};
+    if (ev.key === 'L' || ev.key === 'l') turnLights();
 	});
 
 	window.requestAnimationFrame(controller); //seguir dibujarndo (simularFrames)
 	function controller() {
+    ctx.fillStyle = lights ? 'black' : 'whitesmoke';
+    ctx.strokeStyle = lights ? 'black' : 'whitesmoke';
 		if (!end) {
 			clearScreen(); //limpiar por frame
 
@@ -68,3 +71,22 @@ let canvas = document.getElementById('canvas');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	}
 })();
+
+
+let lights = true;
+let imagen = document.getElementById('myImage');
+imagen.addEventListener('click', () => {
+  lights = !lights;
+
+  let title = document.querySelector('h1');
+  let instrucctions = document.querySelectorAll('p');
+  
+
+  title.classList.toggle('lightsOFFText')
+  instrucctions.forEach(elt => elt.classList.toggle('lightsOFFText'));
+  document.body.classList.toggle('lightsOFFBG')
+  canvas.classList.toggle('lightsOFFCanvas')
+
+  
+  imagen.src = lights ? 'images/FocoON.png' : 'images/FocoOFF.png';
+})

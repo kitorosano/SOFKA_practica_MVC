@@ -6,29 +6,25 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Pong</title>
 
-		<style>
-			body {
-				display: flex;
-				justify-content: center;
-			}
-			canvas {
-				border: solid;
-			}
-			.instrucciones {
-        text-align: center;
-				margin-top: 2rem;
-				font-size: large;
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				column-gap: 2rem;
-			}
-		</style>
+		<link rel="stylesheet" href="css/styles.css" />
 	</head>
 	<body>
 		<div>
-      <div style="display: flex; justify-content: center; align-items: center; position: relative;" >
-        <h1 style="text-align: center">Ping pong</h1>
-      </div>
+			<div
+				style="
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					position: relative;
+				"
+			>
+				<h1 style="text-align: center">Ping pong</h1>
+				<span style="position: absolute; right: 0">
+					<!-- <button onclick="turnLights()">Lights</button> -->
+
+					<img id="myImage" src="images/focoON.png" width="50px" />
+				</span>
+			</div>
 			<canvas id="canvas" width="800" height="400"></canvas>
 			<div class="instrucciones">
 				<div style="grid-row: 1">
@@ -46,8 +42,8 @@
 			</div>
 		</div>
 
-    <script src="Ball.js"></script>
-		<script src="Bar.js"></script>
-		<script src="main.js"></script>
+		<script src="js/Ball.js"></script>
+		<script src="js/Bar.js"></script>
+		<script src="js/main.js"></script>
 	</body>
 </html>
