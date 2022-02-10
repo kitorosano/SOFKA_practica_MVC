@@ -13,23 +13,33 @@ class Ball {
 	checkCollisionLeft(bar) {
 		// check if ball is inside any bar, vertically and horizontally
 		if (
-			this.y + this.r > bar.y &&
 			this.y - this.r < bar.y + bar.height &&
+			this.y + this.r > bar.y &&
 			this.x - this.r < bar.x + bar.width
 		) {
-			this.speed_x *= -1;
-      console.log("dentro barra izq")
+      if (this.x > bar.x) { // during the time when the absolute ball.x position isn't over the bar.x
+        let differenceInHeight = this.y - bar.y
+        let angle = this.#calculateNewAngle(differenceInHeight, 0, bar.height, -45, 45); // generate a new angle for the ball after it bounce
+        this.speed_x = 5 * Math.cos(angle);
+        this.speed_y = 5 * Math.sin(angle);
+        this.x = bar.x + bar.width + this.r; // reasingning ball.x, so it doesn't collide again
+      }
 		}
 	}
 	checkCollisionRight(bar) {
 		// check if ball is inside any bar, vertically and horizontally
 		if (
-			this.y + this.r > bar.y &&
 			this.y - this.r < bar.y + bar.height &&
+			this.y + this.r > bar.y &&
 			this.x + this.r > bar.x
 		) {
-			this.speed_x *= -1;
-      console.log("dentro barra der")
+      if (this.x < bar.x + bar.width) { // during the time when the absolute ball.x position isn't over the bar.x
+        let differenceInHeight = this.y - bar.y
+        let angle = this.#calculateNewAngle(differenceInHeight, 0, bar.height, 255, 135); // generate a new angle for the ball after it bounce
+        this.speed_x = 5 * Math.cos(angle);
+        this.speed_y = 5 * Math.sin(angle);
+        this.x = bar.x - this.r; // reasingning ball.x so it doesn't collide again
+      }
 		}
 	}
 
@@ -37,6 +47,7 @@ class Ball {
 		this.x += this.speed_x;
 		this.y += this.speed_y;
 	}
+  
 
 	reset() {
 		// Reset ball position to the center of the canvas
@@ -56,8 +67,7 @@ class Ball {
 
 	edges() {
 		// check vertical edges
-		if (this.y + this.r < 0 || this.x + this.r > canvas.height) {
-      console.log("vertical")
+		if ((this.y - this.r) < 0 || (this.y + this.r) > canvas.height) {
 			this.speed_y *= -1;
 		}
 		// check win states
@@ -72,21 +82,6 @@ class Ball {
 		}
 	}
 
-	collision(bar) {
-		// Reacciona a la colision con una barra que recibe como parametro
-		var relative_intersect_y = bar.y + bar.height / 2 - this.y;
-
-		var normalized_intersect_y = relative_intersect_y / (bar.height / 2);
-
-		this.bouce_angle = normalized_intersect_y * this.max_bounce_angle;
-
-		this.speed_y = this.speed * -Math.sin(this.bouce_angle);
-		this.speed_x = this.speed * Math.cos(this.bouce_angle);
-
-		if (this.x > this.board.width / 2) this.direction = -1;
-		else this.direction = 1;
-	}
-
 	show() {
 		this.ctx.beginPath();
 		this.ctx.arc(this.x, this.y, this.r, 0, 7);
@@ -94,12 +89,14 @@ class Ball {
 		this.ctx.closePath();
 	}
 
-	#calculateNewAngle(valueToMap, min, max) {
-		let newMin = (255 * Math.PI) / 180;
-		let newMax = (135 * Math.PI) / 180;
+	#calculateNewAngle(valueToMap, min, max, newMin, newMax) {
+		let newMinRad = (newMin * Math.PI) / 180; // 255 radians
+		let newMaxRad = (newMax * Math.PI) / 180; // 135 radians
 
-		let slope = (newMax - newMin) / (max - min);
+		let slope = (newMaxRad - newMinRad) / (max - min);
 
-		return (angle = newMin + slope * (valueToMap - min));
+		let newAngle = newMinRad + slope * (valueToMap - min);
+    // console.log(newAngle)
+    return newAngle;
 	}
 }

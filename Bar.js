@@ -2,10 +2,17 @@ class Bar {
 	constructor(x, y, width, height) {
 		this.x = x;
 		this.y = y;
+    this.original_x = x;
+    this.original_y = y;
 		this.width = width;
 		this.height = height;
     this.ctx = canvas.getContext('2d');
 	}
+
+  reset(){
+    this.x = this.original_x;
+		this.y = this.original_y;
+  }
 
 	move(steps) {
 		this.y += steps;

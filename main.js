@@ -1,13 +1,14 @@
 let leftscore = 0,
 	rightscore = 0;
+const MAXPOINTS = 7;
 let canvas = document.getElementById('canvas');
 
 (function () {
-	let barLeft = new Bar(20, 100, 20, 100);
-	let barRight = new Bar(740, 100, 20, 100);
+	let barLeft = new Bar(10, 100, 20, 100);
+	let barRight = new Bar(770, 100, 20, 100);
 	let ball = new Ball();
 
-	let pause = true;
+	let pause = true, end = false;
 	let ctx = canvas.getContext('2d');
 
 	document.addEventListener('keydown', (ev) => {
@@ -17,39 +18,49 @@ let canvas = document.getElementById('canvas');
 		if (ev.key === 'ArrowDown') barRight.move(10);
 		if (ev.key === ' ') pause = !pause; // pausa
 		if (ev.key === 'R' || ev.key === 'r') {
-			ball.reset();
+      ball.reset();
 			barLeft.reset();
 			barRight.reset();
 			leftscore = 0;
 			rightscore = 0;
-			pause = true;
+      end = false;
+      pause = true;
 		}
 	});
 
 	window.requestAnimationFrame(controller); //seguir dibujarndo (simularFrames)
 	function controller() {
-		clearScreen(); //limpiar por frame
+		if (!end) {
+			clearScreen(); //limpiar por frame
 
-		barLeft.show();
-		barRight.show();
+			barLeft.show();
+			barRight.show();
 
-		ball.show();
-		if (!pause) ball.move(); //mover la pelota cuando no estemos en pausa;
-		// ball.edges();
-		ball.checkCollisionLeft(barLeft);
-		ball.checkCollisionRight(barRight);
+			ball.show();
+			if (!pause) ball.move(); //mover la pelota cuando no estemos en pausa;
+			ball.edges();
+			ball.checkCollisionLeft(barLeft);
+			ball.checkCollisionRight(barRight);
 
-		// Puntajes
-		ctx.font = '32px serif';
-		ctx.fillText(leftscore, 32, 40);
-		ctx.fillText(rightscore, canvas.width - 64, 40);
+			// Puntajes
+			ctx.font = '32px serif';
+			ctx.fillText(leftscore, 32, 40);
+			ctx.fillText(rightscore, canvas.width - 64, 40);
 
-		window.requestAnimationFrame(controller); //recursividad
+			window.requestAnimationFrame(controller); //recursividad
 
-		if (pause) {
-			//dibujar texto pausa en el medio de la pantalla
+			//cuando este en PAUSA dibujar texto pausa en el medio de la pantalla
+			if (pause) {
+				ctx.font = '64px serif';
+				ctx.strokeText('PAUSE', (canvas.width / 6) * 2.3, canvas.height / 3);
+			}
+		}
+
+    // El juego termina cuando se alcanza el puntaje max.s
+		if (leftscore >= MAXPOINTS || rightscore >= MAXPOINTS) {
+      end = true;
 			ctx.font = '64px serif';
-			ctx.strokeText('PAUSE', canvas.width / 6 * 2.3, canvas.height / 3);
+			ctx.strokeText('END', (canvas.width / 6) * 2.5, canvas.height / 3);
 		}
 	}
 
