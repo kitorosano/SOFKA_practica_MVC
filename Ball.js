@@ -10,16 +10,26 @@ class Ball {
 		this.reset(); //Call reset to setup everything
 	}
 
-	checkCollision(bar) {
+	checkCollisionLeft(bar) {
 		// check if ball is inside any bar, vertically and horizontally
 		if (
 			this.y + this.r > bar.y &&
 			this.y - this.r < bar.y + bar.height &&
-			this.x + this.r > bar.x &&
-			this.x + this.r < bar.x + bar.width
+			this.x - this.r < bar.x + bar.width
 		) {
 			this.speed_x *= -1;
-      console.log("dentro barra")
+      console.log("dentro barra izq")
+		}
+	}
+	checkCollisionRight(bar) {
+		// check if ball is inside any bar, vertically and horizontally
+		if (
+			this.y + this.r > bar.y &&
+			this.y - this.r < bar.y + bar.height &&
+			this.x + this.r > bar.x
+		) {
+			this.speed_x *= -1;
+      console.log("dentro barra der")
 		}
 	}
 
@@ -35,7 +45,6 @@ class Ball {
 
 		// give random angle as start up direction
 		let angle = Math.random() * (Math.PI / 4 + Math.PI / 4) - Math.PI / 4;
-		console.log(angle);
 		this.speed_x = 5 * Math.cos(angle);
 		this.speed_y = 5 * Math.sin(angle);
 
