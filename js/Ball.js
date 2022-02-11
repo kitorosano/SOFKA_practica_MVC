@@ -17,13 +17,20 @@ class Ball {
 			this.y + this.r > bar.y &&
 			this.x - this.r < bar.x + bar.width
 		) {
-      if (this.x > bar.x) { // during the time when the absolute ball.x position isn't over the bar.x
-        let differenceInHeight = this.y - bar.y
-        let angle = this.#calculateNewAngle(differenceInHeight, 0, bar.height, -45, 45); // generate a new angle for the ball after it bounce
-        this.speed_x = 5 * Math.cos(angle);
-        this.speed_y = 5 * Math.sin(angle);
-        this.x = bar.x + bar.width + this.r; // reasingning ball.x, so it doesn't collide again
-      }
+			if (this.x > bar.x) {
+				// during the time when the absolute ball.x position isn't over the bar.x
+				let differenceInHeight = this.y - bar.y;
+				let angle = this.#calculateNewAngle(
+					differenceInHeight,
+					0,
+					bar.height,
+					-45,
+					45
+				); // generate a new angle for the ball after it bounce
+				this.speed_x = 5 * Math.cos(angle);
+				this.speed_y = 5 * Math.sin(angle);
+				this.x = bar.x + bar.width + this.r; // reasingning ball.x, so it doesn't collide again
+			}
 		}
 	}
 	checkCollisionRight(bar) {
@@ -33,13 +40,20 @@ class Ball {
 			this.y + this.r > bar.y &&
 			this.x + this.r > bar.x
 		) {
-      if (this.x < bar.x + bar.width) { // during the time when the absolute ball.x position isn't over the bar.x
-        let differenceInHeight = this.y - bar.y
-        let angle = this.#calculateNewAngle(differenceInHeight, 0, bar.height, 255, 135); // generate a new angle for the ball after it bounce
-        this.speed_x = 5 * Math.cos(angle);
-        this.speed_y = 5 * Math.sin(angle);
-        this.x = bar.x - this.r; // reasingning ball.x so it doesn't collide again
-      }
+			if (this.x < bar.x + bar.width) {
+				// during the time when the absolute ball.x position isn't over the bar.x
+				let differenceInHeight = this.y - bar.y;
+				let angle = this.#calculateNewAngle(
+					differenceInHeight,
+					0,
+					bar.height,
+					255,
+					135
+				); // generate a new angle for the ball after it bounce
+				this.speed_x = 5 * Math.cos(angle);
+				this.speed_y = 5 * Math.sin(angle);
+				this.x = bar.x - this.r; // reasingning ball.x so it doesn't collide again
+			}
 		}
 	}
 
@@ -47,7 +61,6 @@ class Ball {
 		this.x += this.speed_x;
 		this.y += this.speed_y;
 	}
-  
 
 	reset() {
 		// Reset ball position to the center of the canvas
@@ -67,16 +80,19 @@ class Ball {
 
 	edges() {
 		// check vertical edges
-		if ((this.y - this.r) < 0 || (this.y + this.r) > canvas.height) {
+		if (this.y - this.r < 0 || this.y + this.r > canvas.height) {
 			this.speed_y *= -1;
 		}
+
 		// check win states
 		if (this.x - this.r > canvas.width) {
-      leftscore++;
+			scoreSnd.play();
+			leftscore++;
 			this.reset();
 		}
-    
+
 		if (this.x + this.r < 0) {
+			scoreSnd.play();
 			rightscore++;
 			this.reset();
 		}
@@ -96,7 +112,7 @@ class Ball {
 		let slope = (newMaxRad - newMinRad) / (max - min);
 
 		let newAngle = newMinRad + slope * (valueToMap - min);
-    // console.log(newAngle)
-    return newAngle;
+		// console.log(newAngle)
+		return newAngle;
 	}
 }
